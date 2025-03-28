@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #mainsection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h3 {
+            background-color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mainsection"></div>
+
+    <script>
+        function fetchlist() {
+            fetch('https://dog.ceo/api/breeds/list/all')
+                .then(res => res.json())
+                .then(data => showBreeds(data.message))
+                .catch(err => console.log(err));
+        }
+
+        function showBreeds(breeds) {
+            let output = "";
+            for (let breed in breeds) {
+                output += `<h3>${breed}</h3>`;
+            }
+            document.getElementById('mainsection').innerHTML = output;
+        }
+
+        fetchlist();
+    </script>
+</body>
+</html>
