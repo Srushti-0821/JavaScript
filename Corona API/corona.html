@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <style>
+
+        body 
+        { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+        }
+
+        #mainsection 
+        { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            margin: auto; 
+        }
+        
+        table 
+        { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        
+        th, td 
+        { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: center; 
+        }
+        
+        th 
+        { 
+            background-color: #007bff; 
+            color: white; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="mainsection">Loading data...</div>
+
+    <script>
+        function fetchCovidData() {
+            fetch("https://api.rootnet.in/covid19-in/stats/latest")
+                .then(res => res.json())
+                .then(data => showCovidStats(data.data))
+                .catch(err => console.log(err));
+        }
+
+        function showCovidStats(data) {
+            let summary = data.summary;
+            let regional = data.regional;
+            
+            let output = `
+                <h3>COVID-19 India Stats</h3>
+                <p>Total Cases: ${summary.total}</p>
+                <p>Confirmed Cases: ${summary.confirmedCasesIndian}</p>
+                <p>Recovered: ${summary.discharged}</p>
+                <p>Deaths: ${summary.deaths}</p>
+                <h3>State-wise Data</h3>
+                <table>
+                    <tr>
+                        <th>State</th>
+                        <th>Confirmed</th>
+                        <th>Recovered</th>
+                        <th>Deaths</th>
+                    </tr>
+            `;
+
+            for (let region of regional) {
+                output += `
+                    <tr>
+                        <td>${region.loc}</td>
+                        <td>${region.totalConfirmed}</td>
+                        <td>${region.discharged}</td>
+                        <td>${region.deaths}</td>
+                    </tr>
+                `;
+            }
+
+            output += `</table>`;
+            document.getElementById("mainsection").innerHTML = output;
+        }
+
+        fetchCovidData();
+    </script>
+
+</body>
+</html>
